@@ -31,7 +31,8 @@ public class MainActivity extends AppCompatActivity {
                                 .withFillColor(Color.argb(60, 0, 0, 255))
                                 .withStrokeColor(Color.argb(100, 0, 0, 0))
                                 .withStrokeWidth(3)
-                                .withDrawingType(DrawingOption.DrawingType.POLYGON)
+                                .withRequestGPSEnabling(false)
+                                .withDrawingType(DrawingOption.DrawingType.POLYLINE)
                                 .build(getApplicationContext());
                 startActivity(intent);
             }

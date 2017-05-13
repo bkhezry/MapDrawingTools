@@ -2,7 +2,6 @@ package com.github.bkhezry.mapdrawingtools.ui;
 
 import android.content.Intent;
 import android.content.IntentSender;
-import android.graphics.Color;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -73,13 +72,13 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         drawingOption = getIntent().getParcelableExtra(MAP_OPTION);
-
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         setUpFABs();
         initRequestingLocation();
-        requestActivatingGPS();
+        if (drawingOption.getRequestGPSEnabling())
+            requestActivatingGPS();
 
     }
 
@@ -93,7 +92,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
             }
         });
 
-        btnSatellite.setVisibility(drawingOption.isEnableSatelliteView() ? View.VISIBLE : View.GONE);
+        btnSatellite.setVisibility(drawingOption.getEnableSatelliteView() ? View.VISIBLE : View.GONE);
         FloatingActionButton btnUndo = (FloatingActionButton) findViewById(R.id.btnUndo);
         btnUndo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -272,6 +271,9 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
                     .subscribe(new Action1<Location>() {
                         @Override
                         public void call(Location location) {
+                            if (currentLocation == null)
+                                moveMapToCenter(location);
+
                             currentLocation = location;
                             moveMarkerCurrentPosition(location);
                         }
@@ -342,6 +344,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
                         // All required changes were successfully made
                         Log.d(TAG, "User enabled location");
                         getLastKnowLocation();
+                        updateLocation();
                         isGPSOn = true;
                         break;
                     case RESULT_CANCELED:

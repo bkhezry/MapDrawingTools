@@ -1,17 +1,18 @@
 package com.github.bkhezry.mapdrawingtools.model;
 
-import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 public class DrawingOption implements Parcelable {
     private Double locationLatitude;
     private Double locationLongitude;
-    private int fillColor = Color.argb(0, 0, 0, 0);
-    private int strokeColor = Color.argb(255, 0, 0, 0);
-    private int strokeWidth = 10;
-    private boolean enableSatelliteView = true;
-    private DrawingType drawingType = DrawingType.POLYGON;
+    private int fillColor;
+    private int strokeColor;
+    private int strokeWidth;
+    private Boolean enableSatelliteView;
+    private Boolean requestGPSEnabling;
+    private DrawingOption.DrawingType drawingType;
+
     public enum DrawingType {
         POLYGON, POLYLINE, POINT
     }
@@ -56,12 +57,20 @@ public class DrawingOption implements Parcelable {
         this.strokeWidth = strokeWidth;
     }
 
-    public boolean isEnableSatelliteView() {
+    public Boolean getEnableSatelliteView() {
         return enableSatelliteView;
     }
 
-    public void setEnableSatelliteView(boolean enableSatelliteView) {
+    public void setEnableSatelliteView(Boolean enableSatelliteView) {
         this.enableSatelliteView = enableSatelliteView;
+    }
+
+    public Boolean getRequestGPSEnabling() {
+        return requestGPSEnabling;
+    }
+
+    public void setRequestGPSEnabling(Boolean requestGPSEnabling) {
+        this.requestGPSEnabling = requestGPSEnabling;
     }
 
     public DrawingType getDrawingType() {
@@ -72,13 +81,14 @@ public class DrawingOption implements Parcelable {
         this.drawingType = drawingType;
     }
 
-    public DrawingOption(Double locationLatitude, Double locationLongitude, int fillColor, int strokeColor, int strokeWidth, boolean enableSatelliteView, DrawingType drawingType) {
+    public DrawingOption(Double locationLatitude, Double locationLongitude, int fillColor, int strokeColor, int strokeWidth, Boolean enableSatelliteView, Boolean requestGPSEnabling, DrawingType drawingType) {
         this.locationLatitude = locationLatitude;
         this.locationLongitude = locationLongitude;
         this.fillColor = fillColor;
         this.strokeColor = strokeColor;
         this.strokeWidth = strokeWidth;
         this.enableSatelliteView = enableSatelliteView;
+        this.requestGPSEnabling = requestGPSEnabling;
         this.drawingType = drawingType;
     }
 
@@ -94,7 +104,8 @@ public class DrawingOption implements Parcelable {
         dest.writeInt(this.fillColor);
         dest.writeInt(this.strokeColor);
         dest.writeInt(this.strokeWidth);
-        dest.writeByte(this.enableSatelliteView ? (byte) 1 : (byte) 0);
+        dest.writeValue(this.enableSatelliteView);
+        dest.writeValue(this.requestGPSEnabling);
         dest.writeInt(this.drawingType == null ? -1 : this.drawingType.ordinal());
     }
 
@@ -104,7 +115,8 @@ public class DrawingOption implements Parcelable {
         this.fillColor = in.readInt();
         this.strokeColor = in.readInt();
         this.strokeWidth = in.readInt();
-        this.enableSatelliteView = in.readByte() != 0;
+        this.enableSatelliteView = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.requestGPSEnabling = (Boolean) in.readValue(Boolean.class.getClassLoader());
         int tmpDrawingType = in.readInt();
         this.drawingType = tmpDrawingType == -1 ? null : DrawingType.values()[tmpDrawingType];
     }

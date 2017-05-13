@@ -3,6 +3,7 @@ package com.github.bkhezry.mapdrawingtools.model;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 
 
 import com.github.bkhezry.mapdrawingtools.ui.MapsActivity;
@@ -11,10 +12,11 @@ import com.github.bkhezry.mapdrawingtools.ui.MapsActivity;
 public class DrawingOptionBuilder {
     private Double locationLatitude;
     private Double locationLongitude;
-    private int fillColor;
-    private int strokeColor;
-    private int strokeWidth;
-    private boolean enableSatelliteView = true;
+    private int fillColor = Color.argb(0, 0, 0, 0);
+    private int strokeColor = Color.argb(255, 0, 0, 0);
+    private int strokeWidth = 10;
+    private Boolean enableSatelliteView = true;
+    private Boolean requestGPSEnabling = false;
     private DrawingOption.DrawingType drawingType = DrawingOption.DrawingType.POLYGON;
 
     public DrawingOptionBuilder() {
@@ -51,9 +53,14 @@ public class DrawingOptionBuilder {
         return this;
     }
 
+    public DrawingOptionBuilder withRequestGPSEnabling(Boolean requestGPSEnabling) {
+        this.requestGPSEnabling = requestGPSEnabling;
+        return this;
+    }
+
     public Intent build(Context context) {
         Intent intent = new Intent(context, MapsActivity.class);
-        DrawingOption drawingOption = new DrawingOption(locationLatitude, locationLongitude, fillColor, strokeColor, strokeWidth, enableSatelliteView, drawingType);
+        DrawingOption drawingOption = new DrawingOption(locationLatitude, locationLongitude, fillColor, strokeColor, strokeWidth, enableSatelliteView, requestGPSEnabling, drawingType);
         intent.putExtra(MapsActivity.MAP_OPTION, drawingOption);
         return intent;
     }
