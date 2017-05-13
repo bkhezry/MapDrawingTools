@@ -241,8 +241,8 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
             polyline.remove();
         }
         PolylineOptions polylineOptions = new PolylineOptions();
-        polylineOptions.color(Color.RED);
-        polylineOptions.width(3);
+        polylineOptions.color(drawingOption.getStrokeColor());
+        polylineOptions.width(drawingOption.getStrokeWidth());
         polylineOptions.addAll(latLngList);
         polyline = mMap.addPolyline(polylineOptions);
     }
@@ -253,7 +253,9 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
             polygon.remove();
         }
         PolygonOptions polygonOptions = new PolygonOptions();
-        polygonOptions.fillColor(Color.argb(50, 0, 0, 255));
+        polygonOptions.fillColor(drawingOption.getFillColor());
+        polygonOptions.strokeColor(drawingOption.getStrokeColor());
+        polygonOptions.strokeWidth(drawingOption.getStrokeWidth());
         polygonOptions.addAll(latLngList);
         polygon = mMap.addPolygon(polygonOptions);
     }

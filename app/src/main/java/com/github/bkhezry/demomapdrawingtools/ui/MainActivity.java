@@ -1,6 +1,7 @@
 package com.github.bkhezry.demomapdrawingtools.ui;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
@@ -27,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent =
                         new DrawingOptionBuilder()
                                 .withLocation(35.659920, 51.621036)
+                                .withFillColor(Color.argb(60, 0, 0, 255))
+                                .withStrokeColor(Color.argb(100, 0, 0, 0))
+                                .withStrokeWidth(3)
                                 .withDrawingType(DrawingOption.DrawingType.POLYGON)
                                 .build(getApplicationContext());
                 startActivity(intent);
