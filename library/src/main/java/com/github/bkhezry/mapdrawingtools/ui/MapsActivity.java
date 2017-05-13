@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 
 import com.github.bkhezry.mapdrawingtools.R;
-import com.github.bkhezry.mapdrawingtools.utils.MapOptionBuilder;
+import com.github.bkhezry.mapdrawingtools.model.DrawingOption;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -48,16 +48,14 @@ import rx.subscriptions.CompositeSubscription;
 
 public class MapsActivity extends BaseActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
+    public final static String MAP_OPTION = "map_option";
     private final static int REQUEST_CHECK_SETTINGS = 0;
     private GoogleMap mMap;
     private Location currentLocation;
-    private boolean enableSatelliteView;
     private List<LatLng> points = new ArrayList<>();
     private List<Marker> markerList = new ArrayList<>();
     private Polygon polygon;
     private Polyline polyline;
-    private LatLng mapPosition;
-    private MapOptionBuilder.DrawingType drawingType;
     private ReactiveLocationProvider locationProvider;
     private Observable<Location> lastKnownLocationObservable;
     private Observable<Location> locationUpdatesObservable;
@@ -67,16 +65,15 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
     private CompositeSubscription compositeSubscription;
     private final static String TAG = "MapsActivity";
     private boolean isGPSOn = false;
-    GoogleApiClient mGoogleApiClient;
+    private GoogleApiClient mGoogleApiClient;
+    private DrawingOption drawingOption;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        Intent intent = getIntent();
-        mapPosition = new LatLng(intent.getDoubleExtra(MapOptionBuilder.LATITUDE, 0), intent.getDoubleExtra(MapOptionBuilder.LONGITUDE, 0));
-        drawingType = (MapOptionBuilder.DrawingType) intent.getSerializableExtra(MapOptionBuilder.DRAWING_TYPE);
-        enableSatelliteView = intent.getBooleanExtra(MapOptionBuilder.ENABLE_SATELLITE_VIEW, true);
+        drawingOption = getIntent().getParcelableExtra(MAP_OPTION);
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -96,7 +93,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
             }
         });
 
-        btnSatellite.setVisibility(enableSatelliteView ? View.VISIBLE : View.GONE);
+        btnSatellite.setVisibility(drawingOption.isEnableSatelliteView() ? View.VISIBLE : View.GONE);
         FloatingActionButton btnUndo = (FloatingActionButton) findViewById(R.id.btnUndo);
         btnUndo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,7 +104,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
                     markerList.remove(marker);
                     points.remove(points.size() - 1);
                     if (points.size() > 0) {
-                        if (drawingType == MapOptionBuilder.DrawingType.POLYGON) {
+                        if (drawingOption.getDrawingType() == DrawingOption.DrawingType.POLYGON) {
                             drawPolygon(points);
                         } else {
                             drawPolyline(points);
@@ -191,8 +188,8 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        LatLng tehran = mapPosition;
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(tehran, 12));
+        LatLng center = new LatLng(drawingOption.getLocationLatitude(), drawingOption.getLocationLongitude());
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(center, 12));
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
@@ -200,9 +197,9 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
                 marker.setTag(latLng);
                 markerList.add(marker);
                 points.add(latLng);
-                if (drawingType == MapOptionBuilder.DrawingType.POLYGON) {
+                if (drawingOption.getDrawingType() == DrawingOption.DrawingType.POLYGON) {
                     drawPolygon(points);
-                } else if (drawingType == MapOptionBuilder.DrawingType.POLYLINE) {
+                } else if (drawingOption.getDrawingType() == DrawingOption.DrawingType.POLYLINE) {
                     drawPolyline(points);
                 }
 
@@ -232,9 +229,9 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
         int position = points.indexOf(latLng);
         points.set(position, marker.getPosition());
         marker.setTag(marker.getPosition());
-        if (drawingType == MapOptionBuilder.DrawingType.POLYGON) {
+        if (drawingOption.getDrawingType() == DrawingOption.DrawingType.POLYGON) {
             drawPolygon(points);
-        } else if (drawingType == MapOptionBuilder.DrawingType.POLYLINE) {
+        } else if (drawingOption.getDrawingType() == DrawingOption.DrawingType.POLYLINE) {
             drawPolyline(points);
         }
     }

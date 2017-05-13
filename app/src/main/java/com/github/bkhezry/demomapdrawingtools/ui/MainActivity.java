@@ -7,7 +7,8 @@ import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import com.github.bkhezry.mapdrawingtools.utils.MapOptionBuilder;
+import com.github.bkhezry.mapdrawingtools.model.DrawingOption;
+import com.github.bkhezry.mapdrawingtools.model.DrawingOptionBuilder;
 import com.github.bkhezry.demomapdrawingtools.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,9 +25,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent =
-                        new MapOptionBuilder()
+                        new DrawingOptionBuilder()
                                 .withLocation(35.659920, 51.621036)
-                                .withDrawingType(MapOptionBuilder.DrawingType.POLYGON)
+                                .withDrawingType(DrawingOption.DrawingType.POLYGON)
                                 .build(getApplicationContext());
                 startActivity(intent);
             }
