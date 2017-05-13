@@ -1,0 +1,94 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.github.bkhezry.demomapdrawingtools.com.github.bkhezry.mapdrawingtools.ui.MapsActivity" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/information_bottom_margin">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btnSatellite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:tint="?colorPrimary"
+            app:backgroundTint="@color/white"
+            app:elevation="2dp"
+            app:fabSize="normal"
+            app:rippleColor="@color/soft_grey"
+            app:srcCompat="@drawable/ic_satellite_on"
+            tools:background="@color/white" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btnGPS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:tint="?colorPrimary"
+            app:backgroundTint="@color/white"
+            app:elevation="2dp"
+            app:fabSize="normal"
+            app:rippleColor="@color/soft_grey"
+            app:srcCompat="@drawable/ic_gps_fixed_black_24dp"
+            tools:background="@color/white" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/information_bottom_margin">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btnUndo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|start"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:tint="?colorPrimary"
+            app:backgroundTint="@color/white"
+            app:elevation="2dp"
+            app:fabSize="normal"
+            app:rippleColor="@color/soft_grey"
+            app:srcCompat="@drawable/ic_undo_black_24dp"
+            tools:background="@color/white" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btnDone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|start"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:tint="?colorPrimary"
+            app:backgroundTint="@color/white"
+            app:elevation="2dp"
+            app:fabSize="normal"
+            app:rippleColor="@color/soft_grey"
+            app:srcCompat="@drawable/ic_done_black_24dp"
+            tools:background="@color/white" />
+    </LinearLayout>
+</FrameLayout>

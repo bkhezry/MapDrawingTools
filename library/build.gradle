@@ -1,0 +1,43 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+
+    defaultConfig {
+        minSdkVersion 17
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    def SupportLibVersion = '25.3.1'
+    compile "com.android.support:appcompat-v7:$SupportLibVersion",
+            "com.android.support:design:$SupportLibVersion"
+    
+    def playServicesVersion = '10.2.1'
+    compile "com.google.android.gms:play-services-maps:$playServicesVersion",
+            "com.google.android.gms:play-services-location:$playServicesVersion"
+
+    compile('com.schibstedspain.android:android-reactive-location:0.10.1') {
+        exclude group: 'com.google.android.gms'
+    }
+    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.4@aar'
+    testCompile 'junit:junit:4.12'
+}
