@@ -3,14 +3,13 @@ package com.github.bkhezry.mapdrawingtools.ui;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-
 
 import com.github.bkhezry.mapdrawingtools.R;
 import com.github.bkhezry.mapdrawingtools.model.DrawingOption;
@@ -28,6 +27,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -192,7 +193,8 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                Marker marker = mMap.addMarker(new MarkerOptions().position(latLng).draggable(true));
+                BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_add_location_light_green_500_36dp);
+                Marker marker = mMap.addMarker(new MarkerOptions().position(latLng).icon(icon).draggable(true));
                 marker.setTag(latLng);
                 markerList.add(marker);
                 points.add(latLng);
@@ -309,6 +311,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
     public void moveMapToCenter(Location location) {
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         if (mMap != null) {
+            myLocationMarker(latLng);
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         }
     }
@@ -316,11 +319,19 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
     public void moveMarkerCurrentPosition(Location location) {
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         if (mMap != null) {
-            if (currentMarker != null) {
-                currentMarker.setPosition(latLng);
-            } else {
-                currentMarker = mMap.addMarker(new MarkerOptions().position(latLng).draggable(true));
-            }
+            myLocationMarker(latLng);
+        }
+    }
+
+    private void myLocationMarker(LatLng latLng) {
+        if (currentMarker != null) {
+            currentMarker.setPosition(latLng);
+        } else {
+            BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_navigation_red_a400_36dp);
+            currentMarker = mMap.addMarker(new MarkerOptions()
+                    .position(latLng)
+                    .icon(icon)
+                    .draggable(false));
         }
     }
 
