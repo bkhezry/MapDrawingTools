@@ -12,6 +12,7 @@ import com.github.bkhezry.mapdrawingtools.ui.MapsActivity;
 public class DrawingOptionBuilder {
     private Double locationLatitude;
     private Double locationLongitude;
+    private float zoom = 14;
     private int fillColor = Color.argb(0, 0, 0, 0);
     private int strokeColor = Color.argb(255, 0, 0, 0);
     private int strokeWidth = 10;
@@ -58,9 +59,14 @@ public class DrawingOptionBuilder {
         return this;
     }
 
+    public DrawingOptionBuilder withMapZoom(float zoom) {
+        this.zoom = zoom;
+        return this;
+    }
+
     public Intent build(Context context) {
         Intent intent = new Intent(context, MapsActivity.class);
-        DrawingOption drawingOption = new DrawingOption(locationLatitude, locationLongitude, fillColor, strokeColor, strokeWidth, enableSatelliteView, requestGPSEnabling, drawingType);
+        DrawingOption drawingOption = new DrawingOption(locationLatitude, locationLongitude, zoom, fillColor, strokeColor, strokeWidth, enableSatelliteView, requestGPSEnabling, drawingType);
         intent.putExtra(MapsActivity.MAP_OPTION, drawingOption);
         return intent;
     }

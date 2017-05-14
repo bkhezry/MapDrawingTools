@@ -6,6 +6,7 @@ import android.os.Parcelable;
 public class DrawingOption implements Parcelable {
     private Double locationLatitude;
     private Double locationLongitude;
+    private float zoom;
     private int fillColor;
     private int strokeColor;
     private int strokeWidth;
@@ -32,7 +33,13 @@ public class DrawingOption implements Parcelable {
     public void setLocationLongitude(Double locationLongitude) {
         this.locationLongitude = locationLongitude;
     }
+    public float getZoom() {
+        return zoom;
+    }
 
+    public void setZoom(float zoom) {
+        this.zoom = zoom;
+    }
     public int getFillColor() {
         return fillColor;
     }
@@ -81,9 +88,10 @@ public class DrawingOption implements Parcelable {
         this.drawingType = drawingType;
     }
 
-    public DrawingOption(Double locationLatitude, Double locationLongitude, int fillColor, int strokeColor, int strokeWidth, Boolean enableSatelliteView, Boolean requestGPSEnabling, DrawingType drawingType) {
+    public DrawingOption(Double locationLatitude, Double locationLongitude, float zoom, int fillColor, int strokeColor, int strokeWidth, Boolean enableSatelliteView, Boolean requestGPSEnabling, DrawingType drawingType) {
         this.locationLatitude = locationLatitude;
         this.locationLongitude = locationLongitude;
+        this.zoom = zoom;
         this.fillColor = fillColor;
         this.strokeColor = strokeColor;
         this.strokeWidth = strokeWidth;
@@ -101,6 +109,7 @@ public class DrawingOption implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(this.locationLatitude);
         dest.writeValue(this.locationLongitude);
+        dest.writeFloat(this.zoom);
         dest.writeInt(this.fillColor);
         dest.writeInt(this.strokeColor);
         dest.writeInt(this.strokeWidth);
@@ -112,6 +121,7 @@ public class DrawingOption implements Parcelable {
     protected DrawingOption(Parcel in) {
         this.locationLatitude = (Double) in.readValue(Double.class.getClassLoader());
         this.locationLongitude = (Double) in.readValue(Double.class.getClassLoader());
+        this.zoom = in.readFloat();
         this.fillColor = in.readInt();
         this.strokeColor = in.readInt();
         this.strokeWidth = in.readInt();
@@ -121,7 +131,7 @@ public class DrawingOption implements Parcelable {
         this.drawingType = tmpDrawingType == -1 ? null : DrawingType.values()[tmpDrawingType];
     }
 
-    public static final Parcelable.Creator<DrawingOption> CREATOR = new Parcelable.Creator<DrawingOption>() {
+    public static final Creator<DrawingOption> CREATOR = new Creator<DrawingOption>() {
         @Override
         public DrawingOption createFromParcel(Parcel source) {
             return new DrawingOption(source);
