@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">MapDrawingTools</string>
     <string name="title_activity_maps">MapDrawingTools</string>
+    <string name="draw_polygon">Draw Polygon</string>
+    <string name="draw_polyline">Draw Polyline</string>
+    <string name="draw_points">Draw Points</string>
 </resources>
