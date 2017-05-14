@@ -18,6 +18,7 @@ public class DrawingOptionBuilder {
     private int strokeWidth = 10;
     private Boolean enableSatelliteView = true;
     private Boolean requestGPSEnabling = false;
+    private Boolean enableCalculateLayout = true;
     private DrawingOption.DrawingType drawingType = DrawingOption.DrawingType.POLYGON;
 
     public DrawingOptionBuilder() {
@@ -64,9 +65,16 @@ public class DrawingOptionBuilder {
         return this;
     }
 
+    public DrawingOptionBuilder withCalculateLayoutHidden() {
+        this.enableCalculateLayout = false;
+        return this;
+    }
+
     public Intent build(Context context) {
+        if (drawingType == DrawingOption.DrawingType.POINT)
+            enableCalculateLayout = false;
         Intent intent = new Intent(context, MapsActivity.class);
-        DrawingOption drawingOption = new DrawingOption(locationLatitude, locationLongitude, zoom, fillColor, strokeColor, strokeWidth, enableSatelliteView, requestGPSEnabling, drawingType);
+        DrawingOption drawingOption = new DrawingOption(locationLatitude, locationLongitude, zoom, fillColor, strokeColor, strokeWidth, enableSatelliteView, requestGPSEnabling, enableCalculateLayout, drawingType);
         intent.putExtra(MapsActivity.MAP_OPTION, drawingOption);
         return intent;
     }

@@ -12,6 +12,8 @@ public class DrawingOption implements Parcelable {
     private int strokeWidth;
     private Boolean enableSatelliteView;
     private Boolean requestGPSEnabling;
+    private Boolean enableCalculateLayout;
+
     private DrawingOption.DrawingType drawingType;
 
     public enum DrawingType {
@@ -33,6 +35,7 @@ public class DrawingOption implements Parcelable {
     public void setLocationLongitude(Double locationLongitude) {
         this.locationLongitude = locationLongitude;
     }
+
     public float getZoom() {
         return zoom;
     }
@@ -40,6 +43,7 @@ public class DrawingOption implements Parcelable {
     public void setZoom(float zoom) {
         this.zoom = zoom;
     }
+
     public int getFillColor() {
         return fillColor;
     }
@@ -80,6 +84,14 @@ public class DrawingOption implements Parcelable {
         this.requestGPSEnabling = requestGPSEnabling;
     }
 
+    public Boolean getEnableCalculateLayout() {
+        return enableCalculateLayout;
+    }
+
+    public void setEnableCalculateLayout(Boolean enableCalculateLayout) {
+        this.enableCalculateLayout = enableCalculateLayout;
+    }
+
     public DrawingType getDrawingType() {
         return drawingType;
     }
@@ -88,7 +100,7 @@ public class DrawingOption implements Parcelable {
         this.drawingType = drawingType;
     }
 
-    public DrawingOption(Double locationLatitude, Double locationLongitude, float zoom, int fillColor, int strokeColor, int strokeWidth, Boolean enableSatelliteView, Boolean requestGPSEnabling, DrawingType drawingType) {
+    public DrawingOption(Double locationLatitude, Double locationLongitude, float zoom, int fillColor, int strokeColor, int strokeWidth, Boolean enableSatelliteView, Boolean requestGPSEnabling, Boolean enableCalculateLayout, DrawingType drawingType) {
         this.locationLatitude = locationLatitude;
         this.locationLongitude = locationLongitude;
         this.zoom = zoom;
@@ -97,6 +109,7 @@ public class DrawingOption implements Parcelable {
         this.strokeWidth = strokeWidth;
         this.enableSatelliteView = enableSatelliteView;
         this.requestGPSEnabling = requestGPSEnabling;
+        this.enableCalculateLayout = enableCalculateLayout;
         this.drawingType = drawingType;
     }
 
@@ -115,6 +128,7 @@ public class DrawingOption implements Parcelable {
         dest.writeInt(this.strokeWidth);
         dest.writeValue(this.enableSatelliteView);
         dest.writeValue(this.requestGPSEnabling);
+        dest.writeValue(this.enableCalculateLayout);
         dest.writeInt(this.drawingType == null ? -1 : this.drawingType.ordinal());
     }
 
@@ -127,6 +141,7 @@ public class DrawingOption implements Parcelable {
         this.strokeWidth = in.readInt();
         this.enableSatelliteView = (Boolean) in.readValue(Boolean.class.getClassLoader());
         this.requestGPSEnabling = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.enableCalculateLayout = (Boolean) in.readValue(Boolean.class.getClassLoader());
         int tmpDrawingType = in.readInt();
         this.drawingType = tmpDrawingType == -1 ? null : DrawingType.values()[tmpDrawingType];
     }

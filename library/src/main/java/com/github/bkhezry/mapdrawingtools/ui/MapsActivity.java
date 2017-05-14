@@ -94,7 +94,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         setUpFABs();
-        setUpCalLayout();
+        setUpCalculateLayout();
         initRequestingLocation();
         if (drawingOption.getRequestGPSEnabling())
             requestActivatingGPS();
@@ -153,8 +153,9 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
         });
     }
 
-    private void setUpCalLayout() {
+    private void setUpCalculateLayout() {
         calLayout = findViewById(R.id.calculate_layout);
+        calLayout.setVisibility(drawingOption.getEnableCalculateLayout() ? View.VISIBLE : View.GONE);
         areaTextView = (TextView) findViewById(R.id.areaTextView);
         lengthTextView = (TextView) findViewById(R.id.lengthTextView);
     }
@@ -336,7 +337,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
         @Override
         public void call(Throwable throwable) {
             Toast.makeText(MapsActivity.this, "Error occurred.", Toast.LENGTH_SHORT).show();
-            Log.d("MainActivity", "Error occurred", throwable);
+            Log.d(TAG, "Error occurred", throwable);
         }
     }
 
