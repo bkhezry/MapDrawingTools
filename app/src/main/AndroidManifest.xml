@@ -39,6 +39,9 @@
             </intent-filter>
         </activity>
         <activity android:name="com.github.bkhezry.mapdrawingtools.ui.MapsActivity" />
+        <activity
+            android:name=".ui.AboutActivity"
+            android:label="@string/action_about" />
     </application>
 
 </manifest>

@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.github.bkhezry.extramaputils.builder.ExtraMarkerBuilder;
@@ -23,6 +25,7 @@ import com.github.bkhezry.mapdrawingtools.model.DataModel;
 import com.github.bkhezry.mapdrawingtools.model.DrawingOption;
 import com.github.bkhezry.mapdrawingtools.model.DrawingOptionBuilder;
 import com.github.bkhezry.demomapdrawingtools.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
@@ -54,9 +57,34 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_about) {
+            Intent intent = new Intent(MainActivity.this, AboutActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
         MapsInitializer.initialize(this);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(32.849412, 53.072805), 7));
     }
 
 
@@ -71,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         new DrawingOptionBuilder()
                                 .withLocation(35.744502, 51.368966)
                                 .withFillColor(Color.argb(60, 0, 0, 255))
-                                .withStrokeColor(Color.argb(100, 0, 0, 0))
+                                .withStrokeColor(Color.argb(100, 255, 0, 0))
                                 .withStrokeWidth(3)
                                 .withRequestGPSEnabling(false)
                                 .withDrawingType(currentDrawingType)
@@ -89,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         new DrawingOptionBuilder()
                                 .withLocation(35.744502, 51.368966)
                                 .withFillColor(Color.argb(60, 0, 0, 255))
-                                .withStrokeColor(Color.argb(100, 0, 0, 0))
+                                .withStrokeColor(Color.argb(100, 255, 0, 0))
                                 .withStrokeWidth(3)
                                 .withRequestGPSEnabling(false)
                                 .withDrawingType(currentDrawingType)
@@ -130,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 new ExtraPolygonBuilder()
                                         .setFillColor(Color.argb(100, 0, 0, 255))
                                         .setPoints(dataModel.getPoints())
-                                        .setStrokeColor(Color.argb(100, 0, 0, 0))
+                                        .setStrokeColor(Color.argb(100, 255, 0, 0))
                                         .setStrokeWidth(5)
                                         .build())
                         .build();
@@ -140,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         .withPolylines(
                                 new ExtraPolylineBuilder()
                                         .setPoints(dataModel.getPoints())
-                                        .setStrokeColor(Color.argb(100, 0, 0, 0))
+                                        .setStrokeColor(Color.argb(100, 255, 0, 0))
                                         .setStrokeWidth(5)
                                         .build()
                         ).build();
