@@ -1,17 +1,25 @@
 package com.github.bkhezry.mapdrawingtools.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.github.bkhezry.mapdrawingtools.R;
+import com.github.bkhezry.mapdrawingtools.model.DataModel;
 import com.github.bkhezry.mapdrawingtools.model.DrawingOption;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -49,7 +57,8 @@ import rx.subscriptions.CompositeSubscription;
 public class MapsActivity extends BaseActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
     public final static String MAP_OPTION = "map_option";
-    private final static int REQUEST_CHECK_SETTINGS = 0;
+    public final static int REQUEST_CHECK_SETTINGS = 0;
+    public static final String POINTS = "points";
     private GoogleMap mMap;
     private Location currentLocation;
     private List<LatLng> points = new ArrayList<>();
@@ -72,6 +81,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         drawingOption = getIntent().getParcelableExtra(MAP_OPTION);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -106,7 +116,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
                     if (points.size() > 0) {
                         if (drawingOption.getDrawingType() == DrawingOption.DrawingType.POLYGON) {
                             drawPolygon(points);
-                        } else {
+                        } else if (drawingOption.getDrawingType() == DrawingOption.DrawingType.POLYLINE) {
                             drawPolyline(points);
                         }
                     }
@@ -117,7 +127,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
         btnDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                returnCurrentPosition();
             }
         });
         FloatingActionButton btnGPS = (FloatingActionButton) findViewById(R.id.btnGPS);
@@ -189,12 +199,13 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
         mMap = googleMap;
 
         LatLng center = new LatLng(drawingOption.getLocationLatitude(), drawingOption.getLocationLongitude());
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(center, 12));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(center, drawingOption.getZoom()));
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_add_location_light_green_500_36dp);
-                Marker marker = mMap.addMarker(new MarkerOptions().position(latLng).icon(icon).draggable(true));
+                @IdRes int icon = R.drawable.ic_add_location_light_green_500_36dp;
+                BitmapDescriptor bitmap = BitmapDescriptorFactory.fromBitmap(getBitmapFromDrawable(MapsActivity.this, icon));
+                Marker marker = mMap.addMarker(new MarkerOptions().position(latLng).icon(bitmap).draggable(true));
                 marker.setTag(latLng);
                 markerList.add(marker);
                 points.add(latLng);
@@ -234,6 +245,8 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
             drawPolygon(points);
         } else if (drawingOption.getDrawingType() == DrawingOption.DrawingType.POLYLINE) {
             drawPolyline(points);
+        } else {
+
         }
     }
 
@@ -327,10 +340,11 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
         if (currentMarker != null) {
             currentMarker.setPosition(latLng);
         } else {
-            BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_navigation_red_a400_36dp);
+            @IdRes int icon = R.drawable.ic_navigation_red_a400_36dp;
+            BitmapDescriptor bitmap = BitmapDescriptorFactory.fromBitmap(getBitmapFromDrawable(MapsActivity.this, icon));
             currentMarker = mMap.addMarker(new MarkerOptions()
                     .position(latLng)
-                    .icon(icon)
+                    .icon(bitmap)
                     .draggable(false));
         }
     }
@@ -385,4 +399,29 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
 
     }
 
+    private void returnCurrentPosition() {
+        if (points.size() > 0) {
+            Intent returnIntent = new Intent();
+            LatLng[] latLngs = new LatLng[points.size()];
+            points.toArray(latLngs);
+            DataModel dataModel = new DataModel();
+            dataModel.setCount(points.size());
+            dataModel.setPoints(latLngs);
+            returnIntent.putExtra(POINTS, dataModel);
+            setResult(RESULT_OK, returnIntent);
+
+        } else {
+            setResult(RESULT_CANCELED);
+        }
+        finish();
+    }
+
+    private static Bitmap getBitmapFromDrawable(Context context, int icon) {
+        Drawable drawable = ContextCompat.getDrawable(context, icon);
+        Bitmap obm = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(obm);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return obm;
+    }
 }
