@@ -16,11 +16,13 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.bkhezry.mapdrawingtools.R;
 import com.github.bkhezry.mapdrawingtools.model.DataModel;
 import com.github.bkhezry.mapdrawingtools.model.DrawingOption;
+import com.github.bkhezry.mapdrawingtools.utils.CalUtils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -45,8 +47,10 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import pl.charmas.android.reactivelocation.ReactiveLocationProvider;
 import rx.Observable;
@@ -76,6 +80,9 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
     private boolean isGPSOn = false;
     private GoogleApiClient mGoogleApiClient;
     private DrawingOption drawingOption;
+    private View calLayout;
+    private TextView areaTextView;
+    private TextView lengthTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +94,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         setUpFABs();
+        setUpCalLayout();
         initRequestingLocation();
         if (drawingOption.getRequestGPSEnabling())
             requestActivatingGPS();
@@ -143,6 +151,12 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
                 }
             }
         });
+    }
+
+    private void setUpCalLayout() {
+        calLayout = findViewById(R.id.calculate_layout);
+        areaTextView = (TextView) findViewById(R.id.areaTextView);
+        lengthTextView = (TextView) findViewById(R.id.lengthTextView);
     }
 
 
@@ -211,8 +225,10 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
                 points.add(latLng);
                 if (drawingOption.getDrawingType() == DrawingOption.DrawingType.POLYGON) {
                     drawPolygon(points);
+                    setAreaLength(points);
                 } else if (drawingOption.getDrawingType() == DrawingOption.DrawingType.POLYLINE) {
                     drawPolyline(points);
+                    setLength(points);
                 }
 
 
@@ -226,29 +242,32 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
 
             @Override
             public void onMarkerDrag(Marker marker) {
-                updateMarkerLocation(marker);
+                updateMarkerLocation(marker, false);
             }
 
             @Override
             public void onMarkerDragEnd(Marker marker) {
-                updateMarkerLocation(marker);
+                updateMarkerLocation(marker, true);
             }
         });
     }
 
-    private void updateMarkerLocation(Marker marker) {
+    private void updateMarkerLocation(Marker marker, boolean calculate) {
         LatLng latLng = (LatLng) marker.getTag();
         int position = points.indexOf(latLng);
         points.set(position, marker.getPosition());
         marker.setTag(marker.getPosition());
         if (drawingOption.getDrawingType() == DrawingOption.DrawingType.POLYGON) {
             drawPolygon(points);
+            if (calculate)
+                setAreaLength(points);
         } else if (drawingOption.getDrawingType() == DrawingOption.DrawingType.POLYLINE) {
             drawPolyline(points);
-        } else {
-
+            if (calculate)
+                setLength(points);
         }
     }
+
 
     private void drawPolyline(List<LatLng> latLngList) {
         if (polyline != null) {
@@ -423,5 +442,14 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Go
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
         return obm;
+    }
+
+    private void setAreaLength(List<LatLng> points) {
+        areaTextView.setText(getString(R.string.area_label) + String.format(Locale.ENGLISH, "%.2f", CalUtils.getArea(points)) + getString(R.string.mm_label));
+        lengthTextView.setText(getString(R.string.length_label) + String.format(Locale.ENGLISH, "%.2f", CalUtils.getLength(points)) + getString(R.string.m_label));
+    }
+
+    private void setLength(List<LatLng> points) {
+        lengthTextView.setText(getString(R.string.length_label) + String.format(Locale.ENGLISH, "%.2f", CalUtils.getLength(points)) + getString(R.string.m_label));
     }
 }

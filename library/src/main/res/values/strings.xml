@@ -1,3 +1,6 @@
 <resources>
-    <string name="app_name">MapDrawingTools</string>
+    <string name="area_label">Area: \u0020</string>
+    <string name="length_label">Length: \u0020</string>
+    <string name="m_label">\u0020 m</string>
+    <string name="mm_label">\u0020 m^2</string>
 </resources>
