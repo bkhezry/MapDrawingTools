@@ -1,4 +1,4 @@
-## simple library for handle markers, polygons and polylines on google maps.
+## simple library for manually Drawing element of Map and return them to main Application
 
 MapDrawingTools is an android library to Drawing manually polygon, polyline and points in the Google Map and return coordinates from library to your App
 
@@ -10,8 +10,8 @@ MapDrawingTools is an android library to Drawing manually polygon, polyline and 
 - Google Play Services Maps 10.2.0
 
 **Highlights**
-- Add point of Polygon, Polyline and Markers with Tab on the Map
-- Relocation all Markers and draw them with dragging the Markes.
+- Add point of `Polygon`, `Polyline` and `Markers` with Tab on the Map
+- Relocation all Markers and draw them with dragging the Markers.
 - Supports calculating `area` of polygon & `length` of polyline
 - Supports Undo point inserted to the Map
 
