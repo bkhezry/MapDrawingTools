@@ -28,7 +28,9 @@ dependencies {
     def SupportLibVersion = '25.3.1'
     compile "com.android.support:appcompat-v7:$SupportLibVersion",
             "com.android.support:design:$SupportLibVersion"
-
+    compile ('com.github.bkhezry:ExtraMapUtils:v1.2.0'){
+        exclude group: 'com.android.support'
+    }
     compile project(':library')
     testCompile 'junit:junit:4.12'
 }
