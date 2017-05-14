@@ -20,9 +20,9 @@ MapDrawingTools is an android library to Drawing manually polygon, polyline and 
 You can download the latest demo APK from here: https://github.com/bkhezry/MapDrawingTools/blob/master/assets/DemoMapDrawingTools.apk
 
 ## Screenshots
-<img src="assets/screenshot-1.png" />
-<img src="assets/screenshot-2.png" />
-<img src="assets/screenshot-3.png" />
+<img src="assets/screenshot_1.png" />
+<img src="assets/screenshot_2.png" />
+<img src="assets/screenshot_3.png" />
 
 # Setup
 ## 1. Provide the gradle dependency
