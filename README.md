@@ -2,7 +2,7 @@
 
 [![](https://jitpack.io/v/bkhezry/MapDrawingTools.svg)](https://jitpack.io/#bkhezry/MapDrawingTools)
 
-MapDrawingTools is an android library to Drawing manually polygon, polyline and points in the Google Map and return coordinates from library to your App
+MapDrawingTools is an android library to Drawing manually polygon, polyline and points in the Google Map and return coordinates from library to your App. this library usefull for application that pick multiple point or drawing border of land to get data from users.
 
 **Project Setup and Dependencies**
 - JDK 8
@@ -22,7 +22,7 @@ MapDrawingTools is an android library to Drawing manually polygon, polyline and 
 ### Youtube
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=r0vnjlv77F4
 " target="_blank"><img src="http://img.youtube.com/vi/r0vnjlv77F4/0.jpg" 
-alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" /></a>
+alt="MapDrawingTools" width="480" height="360" border="10" /></a>
 
 You can download the latest demo APK from here: https://github.com/bkhezry/MapDrawingTools/blob/master/assets/DemoMapDrawingTools.apk
 
@@ -50,14 +50,66 @@ dependencies {
 ```
 
 ## 2. Add your code
+add MapsActivity to yout app AndroidManifest file
+```xml
+<activity android:name="com.github.bkhezry.mapdrawingtools.ui.MapsActivity" />
+```
+set theme of this activity to custom `Theme.AppCompat` that contain two items.
+```xml
+<item name="windowActionBar">false</item>
+<item name="windowNoTitle">true</item>
+```
+in your app add this code:
+```java
+DrawingOption.DrawingType currentDrawingType = DrawingOption.DrawingType.POLYGON;
+Intent intent =
+	new DrawingOptionBuilder()
+		.withLocation(35.744502, 51.368966)
+		.withMapZoom(14)
+		.withFillColor(Color.argb(60, 0, 0, 255))
+		.withStrokeColor(Color.argb(100, 255, 0, 0))
+		.withStrokeWidth(3)
+		.withRequestGPSEnabling(false)
+		.withDrawingType(currentDrawingType)
+		.build(getApplicationContext());
+startActivityForResult(intent, REQUEST_CODE);
+ ```
+ ## DrawingOption attributes
 
+| Name | Type | Default | Description |
+|:----:|:----:|:-------:|:-----------:|
+|locationLatitude|Double|@NoneNullable| latitude of center map |
+|locationLongitude|Double|@NoneNullable| longitude of center map |
+|zoom|float|14| zoom of map|
+|fillColor|int|Color.argb(0, 0, 0, 0)|only use in polygon for fill color|
+|strokeColor|int|Color.argb(255, 0, 0, 0)|strock color of polygon and polyline|
+|strokeWidth|int|10|strock width of polygon and polyline|
+|enableSatelliteView|boolean|true|show switch between satellite or default map icon|
+|requestGPSEnabling|boolean|false|request for turn on GPS in start of activity|
+|enableCalculateLayout|boolean|true|show layout of calculated area and length top of MapView|
+|drawingType|DrawingType|POLYGON|type of drawing|
 
+ value of DrawingType: POLYGON, POLYLINE, POINT
  
+### Get Data
+after drawing element and click on Done icon, data will be return to your activity
+```java 
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+if (resultCode == RESULT_OK && requestCode == REQUEST_CODE && data != null) {
+	DataModel dataModel =
+                    data.getExtras().getParcelable(MapsActivity.POINTS);
+	LatLng[] points=dataModel.getPoints();
+  }
+}
+```
 # Developed By
 
 * Behrouz Khezry
  * [@bkhezry](https://twitter.com/bkhezry) 
 
+# Credit
+spacial thanks [Leku](https://github.com/SchibstedSpain/Leku/)
 
 # License
 
