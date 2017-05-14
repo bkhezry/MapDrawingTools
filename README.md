@@ -1,5 +1,7 @@
 ## simple library for manually Drawing element of Map and return them to main Application
 
+[![](https://jitpack.io/v/bkhezry/MapDrawingTools.svg)](https://jitpack.io/#bkhezry/MapDrawingTools)
+
 MapDrawingTools is an android library to Drawing manually polygon, polyline and points in the Google Map and return coordinates from library to your App
 
 **Project Setup and Dependencies**
