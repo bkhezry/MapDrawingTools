@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
 
     defaultConfig {
         minSdkVersion 17
-        targetSdkVersion 25
+        targetSdkVersion 28
         versionCode 110
         versionName "1.1.0"
 
@@ -27,11 +27,11 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    def SupportLibVersion = '25.3.1'
+    def SupportLibVersion = '28.0.0'
     compile "com.android.support:appcompat-v7:$SupportLibVersion",
             "com.android.support:design:$SupportLibVersion"
     
-    def playServicesVersion = '10.2.1'
+    def playServicesVersion = '16.0.0'
     compile "com.google.android.gms:play-services-maps:$playServicesVersion",
             "com.google.android.gms:play-services-location:$playServicesVersion"
 
