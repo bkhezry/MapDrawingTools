@@ -2,11 +2,11 @@ package com.github.bkhezry.mapdrawingtools.ui;
 
 
 import android.Manifest;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.tbruyelle.rxpermissions.RxPermissions;
 
+import androidx.appcompat.app.AppCompatActivity;
 import rx.functions.Action1;
 
 public abstract class BaseActivity extends AppCompatActivity {
