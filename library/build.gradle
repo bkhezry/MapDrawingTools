@@ -23,22 +23,22 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('androidx.test.espresso:espresso-core:3.1.0-alpha4', {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0-alpha4', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     def SupportLibVersion = '1.0.0-beta01'
-    compile "androidx.appcompat:appcompat:$SupportLibVersion",
+    implementation "androidx.appcompat:appcompat:$SupportLibVersion",
             "com.google.android.material:material:$SupportLibVersion"
     
     def playServicesVersion = '16.0.0'
-    compile "com.google.android.gms:play-services-maps:$playServicesVersion",
+    implementation "com.google.android.gms:play-services-maps:$playServicesVersion",
             "com.google.android.gms:play-services-location:$playServicesVersion"
 
-    compile('com.schibstedspain.android:android-reactive-location:0.10.1') {
+    implementation('com.schibstedspain.android:android-reactive-location:0.10.1') {
         exclude group: 'com.google.android.gms'
     }
-    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.4@aar'
-    compile 'com.google.maps.android:android-maps-utils:0.5+'
-    testCompile 'junit:junit:4.12'
+    implementation 'com.tbruyelle.rxpermissions:rxpermissions:0.9.4@aar'
+    implementation 'com.google.maps.android:android-maps-utils:0.5+'
+    testImplementation'junit:junit:4.12'
 }

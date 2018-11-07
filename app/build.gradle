@@ -20,17 +20,17 @@ android {
     }
 }
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('androidx.test.espresso:espresso-core:3.1.0-alpha4', {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0-alpha4', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
     def SupportLibVersion = '1.0.0-beta01'
-    compile "androidx.appcompat:appcompat:$SupportLibVersion",
+    implementation "androidx.appcompat:appcompat:$SupportLibVersion",
             "com.google.android.material:material:$SupportLibVersion"
-    compile ('com.github.bkhezry:ExtraMapUtils:v1.2.0'){
+    implementation ('com.github.bkhezry:ExtraMapUtils:v1.2.0'){
         exclude group: 'com.android.support'
     }
-    compile project(':library')
-    testCompile 'junit:junit:4.12'
+    implementation project(':library')
+    testImplementation'junit:junit:4.12'
 }
