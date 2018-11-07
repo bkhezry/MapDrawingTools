@@ -7,10 +7,10 @@ MapDrawingTools is an android library to Drawing manually polygon, polyline and 
 
 **Project Setup and Dependencies**
 - JDK 8
-- Android SDK Build tools 25.0.2
+- Android SDK Build tools 28.0.3
 - Supports API Level +17
-- AppCompat & Cardview libraries 25.3.1
-- Google Play Services Maps 10.2.0
+- AppCompat & Cardview libraries androidx 1.0.0
+- Google Play Services Maps 16.0.0
 
 **Highlights**
 - Add point of `Polygon`, `Polyline` and `Markers` with Tab on the Map
@@ -46,7 +46,7 @@ allprojects {
 Add the dependency:
 ```gradle
 dependencies {
-	compile 'com.github.bkhezry:MapDrawingTools:1.1.0'
+	implementation 'com.github.bkhezry:MapDrawingTools:1.1.3'
 }
 ```
 
